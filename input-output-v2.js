@@ -69,21 +69,16 @@ document.addEventListener('DOMContentLoaded', () => {
   updateSelectOutput(titleStatusSelect, titleStatusOutput);
   updateSelectOutput(durationOwnershipSelect, durationOwnershipOutput);
 
-  // Add inactive state and opacity 50 to buttons
+  // Add inactive state and opacity 50 to button
   var ownerIndividual = document.getElementById('owner-individual');
   var ownerBusiness = document.getElementById('owner-business');
-  var ownerBtn = document.getElementById('owner-btn');
   var ownerBtnMobile = document.getElementById('owner-btn-mobile');
 
   function updateOwnerBtnStyle() {
     if (!ownerIndividual.checked && !ownerBusiness.checked) {
-      ownerBtn.style.pointerEvents = 'none';
-      ownerBtn.style.opacity = '0.5';
       ownerBtnMobile.style.pointerEvents = 'none';
       ownerBtnMobile.style.opacity = '0.5';
     } else {
-      ownerBtn.style.pointerEvents = 'auto';
-      ownerBtn.style.opacity = '1';
       ownerBtnMobile.style.pointerEvents = 'auto';
       ownerBtnMobile.style.opacity = '1';
     }
@@ -133,7 +128,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Make buttons/selections inactive depending on asset type selections
   var radioButtonIds = ['radio-estate', 'radio-vehicles', 'radio-marine', 'radio-aircraft', 'radio-cfl'];
-  var assetBtn = document.getElementById('asset-btn');
   var assetBtnMobile = document.getElementById('asset-btn-mobile');
   var inactiveInd = document.getElementById('inactive-ind');
 
@@ -144,13 +138,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     if (anySelected) {
-      assetBtn.style.pointerEvents = 'auto';
-      assetBtn.style.opacity = '1';
       assetBtnMobile.style.pointerEvents = 'auto';
       assetBtnMobile.style.opacity = '1';
     } else {
-      assetBtn.style.pointerEvents = 'none';
-      assetBtn.style.opacity = '0.5';
       assetBtnMobile.style.pointerEvents = 'none';
       assetBtnMobile.style.opacity = '0.5';
     }
@@ -209,9 +199,33 @@ document.addEventListener('DOMContentLoaded', () => {
       if (businessDetails) businessDetails.style.display = 'none';
     }
   }
-// Add event listeners for owner radio buttons
-  radioIndividual.addEventListener('change', handleOwnerChange);
-  radioBusiness.addEventListener('change', handleOwnerChange);
-  handleOwnerChange(); // Initial call to set visibility based on selected radio button
 
+  const radioIndividual = document.getElementById('owner-individual');
+  const radioBusiness = document.getElementById('owner-business');
+
+  if (radioIndividual) radioIndividual.addEventListener('change', handleOwnerChange);
+  if (radioBusiness) radioBusiness.addEventListener('change', handleOwnerChange);
+
+  handleOwnerChange();
+
+ /* If required fields aren't filled, add a class of inactive to the buttons. Also, validate the form entries */
+  function validateField(field) {
+    const value = field.value.trim();
+    const type = field.type;
+    
+    if (!value) return false;
+
+    switch (type) {
+      /*case 'email':
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);*/
+      case 'tel':
+        return value.replace(/\D/g, '').length >= 10;
+      case 'number':
+        return !isNaN(value);
+      case 'text':
+        return value.length > 0;
+      default:
+        return true;
+    }
+  }
 });
